@@ -126,7 +126,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('POTEC - Projekt Oszustwo'),
+        title: const Text('POTEC - Lights Out'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -171,10 +171,17 @@ class _LightsOutGameState extends State<LightsOutGame> {
                 child: Container(
                   margin: const EdgeInsets.all(4.0),
                   decoration: BoxDecoration(
-                    color: isOn ? Colors.yellow : Colors.grey[800],
-                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: Colors.black, width: 2),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Image.asset(
+                      isOn ? 'assets/images/on-128.png' : 'assets/images/off-128-2.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
               );
             },
           ),
