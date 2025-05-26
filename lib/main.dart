@@ -30,6 +30,8 @@ class _LightsOutAppState extends State<LightsOutApp> {
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.amber,
+        scaffoldBackgroundColor: Colors.grey[200],
+        cardColor: Colors.white,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -141,51 +143,71 @@ class _LightsOutGameState extends State<LightsOutGame> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Ruchy: $moveCount',
-            style: const TextStyle(fontSize: 20),
-          ),
-          if (_isGameWon())
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'You won!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Ruchy: $moveCount',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+            ),
+            if (_isGameWon())
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'You won!',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+                ),
+              ),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: GridView.builder(
+                shrinkWrap: true,
+                itemCount: gridSize * gridSize,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: gridSize,
+                  crossAxisSpacing: 6,
+                  mainAxisSpacing: 6,
+                ),
+                itemBuilder: (context, index) {
+                  int x = index ~/ gridSize;
+                  int y = index % gridSize;
+                  bool isOn = grid[x][y];
+
+                  return GestureDetector(
+                    onTap: () => _toggle(x, y),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: isOn ? Colors.amber : Colors.grey,
+                          width: 3,
+                        ),
+                        boxShadow: [
+                          if (isOn)
+                            BoxShadow(
+                              color: Colors.amber.withOpacity(0.6),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                            ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: Image.asset(
+                          isOn ? 'assets/images/on-128.png' : 'assets/images/off-128-2.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
-          GridView.builder(
-            shrinkWrap: true,
-            itemCount: gridSize * gridSize,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: gridSize,
-            ),
-            itemBuilder: (context, index) {
-              int x = index ~/ gridSize;
-              int y = index % gridSize;
-              bool isOn = grid[x][y];
-              return GestureDetector(
-                onTap: () => _toggle(x, y),
-                child: Container(
-                  margin: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: Image.asset(
-                      isOn ? 'assets/images/on-128.png' : 'assets/images/off-128-2.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                )
-              );
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
