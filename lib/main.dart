@@ -128,7 +128,18 @@ class _LightsOutGameState extends State<LightsOutGame> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('POTEC - Lights Out'),
+        title: const Text(
+          'POTEC - Lights Out',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            letterSpacing: 1.2,
+          ),
+        ),
+        centerTitle: true,
+        elevation: 8,
+        backgroundColor: isDark ? Colors.grey[900] : Colors.amber[700],
+        foregroundColor: isDark ? Colors.white : Colors.black,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
