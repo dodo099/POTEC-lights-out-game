@@ -58,6 +58,90 @@ class _LightsOutGameState extends State<LightsOutGame> {
   late List<List<bool>> grid;
   int moveCount = 0;
 
+  // Przykładowe łatwe plansze (5x5) DO MODYFIKACJI!!!
+  static final List<List<List<bool>>> easyBoards = [
+    // // PRZYKŁADOWA - WSZYSTKIE NA FALSE DO MODYFIKACJI!
+    // [
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    // ],
+    [
+      [false, false, false, false, false],
+      [false, false, false, false, false],
+      [true,  false,  true, false,  true],
+      [true,  false,  true, false,  true],
+      [false,  true,  true,  true, false],
+    ],
+    
+    [
+      [false, true, true, true, false],
+      [false, true,  true, true,  false],
+      [false, true, true, true, false],
+      [false, false,  false, false,  false],
+      [false, false, false, false, false],
+    ],
+
+    [
+      [true, true, true,  true, false],
+      [true, false,  false, false,  true],
+      [true,  false, false, false, true],
+      [true, false,  false, false,  true],
+      [true, true, true,  true, false],
+    ],
+
+    [
+      [true, false, true,  false, true],
+      [true, false,  false, false,  true],
+      [true,  true, false, true, true],
+      [true, false,  false, false,  true],
+      [true, false, true,  false, true],
+    ],
+
+    [
+      [false, true, false,  true, false],
+      [true, true,  true, true,  true],
+      [false,  true, true, true, false],
+      [false, true,  false, true,  true],
+      [true, true, true,  false, false],
+    ],
+
+    [
+      [false, true, false,  true, false],
+      [true, true,  true, true,  true],
+      [true,  false, true, false, true],
+      [true, true,  true, true,  true],
+      [false, true, false,  true, false],
+    ],
+
+    [
+      [false, false, false,  false, false],
+      [false, false,  true, false,  false],
+      [true,  true, false, true, true],
+      [false, false,  true, false,  false],
+      [false, false, false,  false, false],
+    ],
+
+    [
+      [true, false, true,  false, true],
+      [true, false,  false, false,  true],
+      [false,  false, true, true, false],
+      [true, false,  false, false,  true],
+      [true, false, true,  false, true],
+    ],
+
+    [
+      [true, true, true,  true, true],
+      [false, false,  true, false,  false],
+      [true,  false, false, false, true],
+      [false, false,  true, false,  false],
+      [true, true, true,  true, true],
+    ],
+    // DODAĆ PLANSZE KTÓRE SĄ ŁATWE!!!
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -73,6 +157,16 @@ class _LightsOutGameState extends State<LightsOutGame> {
     grid = List.generate(gridSize, (i) =>
         List.generate(gridSize, (j) => rand.nextBool()));
     moveCount = 0;
+  }
+
+  // Nowa funkcja do wczytania łatwej planszy losowo
+  void _loadEasyBoard() {
+    final rand = Random();
+    final board = easyBoards[rand.nextInt(easyBoards.length)];
+    setState(() {
+      grid = board.map((row) => row.toList()).toList(); // kopiujemy planszę
+      moveCount = 0;
+    });
   }
 
   void _toggle(int x, int y) {
@@ -151,7 +245,6 @@ class _LightsOutGameState extends State<LightsOutGame> {
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -247,6 +340,45 @@ class _LightsOutGameState extends State<LightsOutGame> {
                 },
               ),
             ),
+            const SizedBox(height: 24),
+            // Nowe menu na dole
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: _loadEasyBoard,
+                    child: const Text('Łatwe'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[600],
+                      foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      side: const BorderSide(color: Colors.black, width: 2), // czarna ramka
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      )
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(_initializeGrid);
+                    },
+                    child: const Text('Trudne'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red[600],
+                      foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      side: const BorderSide(color: Colors.black, width: 2), // czarna ramka
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      )
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
