@@ -5,20 +5,47 @@ void main() {
   runApp(const LightsOutApp());
 }
 
-class LightsOutApp extends StatelessWidget {
+class LightsOutApp extends StatefulWidget {
   const LightsOutApp({super.key});
 
   @override
+  State<LightsOutApp> createState() => _LightsOutAppState();
+}
+
+class _LightsOutAppState extends State<LightsOutApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+
+  void _toggleTheme() {
+    setState(() {
+      _themeMode =
+          _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LightsOutGame(),
+      themeMode: _themeMode,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.amber,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.amber,
+        scaffoldBackgroundColor: Colors.black,
+        cardColor: Colors.grey[900],
+      ),
+      home: LightsOutGame(onToggleTheme: _toggleTheme),
     );
   }
 }
 
 class LightsOutGame extends StatefulWidget {
-  const LightsOutGame({super.key});
+  final VoidCallback onToggleTheme;
+
+  const LightsOutGame({super.key, required this.onToggleTheme});
 
   @override
   State<LightsOutGame> createState() => _LightsOutGameState();
@@ -27,19 +54,23 @@ class LightsOutGame extends StatefulWidget {
 class _LightsOutGameState extends State<LightsOutGame> {
   static const int gridSize = 5;
   late List<List<bool>> grid;
-  int moveCount = 0;  // licznik ruchów
+  int moveCount = 0;
 
   @override
   void initState() {
     super.initState();
     _initializeGrid();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showStartDialog();
+    });
   }
 
   void _initializeGrid() {
     final rand = Random();
     grid = List.generate(gridSize, (i) =>
         List.generate(gridSize, (j) => rand.nextBool()));
-    moveCount = 0;  // reset ruchów przy nowej grze
+    moveCount = 0;
   }
 
   void _toggle(int x, int y) {
@@ -56,7 +87,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       flip(x, y - 1);
       flip(x, y + 1);
 
-      moveCount++; // zwiększamy licznik ruchów
+      moveCount++;
     });
   }
 
@@ -67,8 +98,32 @@ class _LightsOutGameState extends State<LightsOutGame> {
     return true;
   }
 
+  void _showStartDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Gra Lights Out'),
+          content: const Text(
+            'Ta aplikacja została stworzona na podstawie układu z programu Logisim Evolution '
+            'na potrzeby projektu na przedmiot POTEC w semestrze 25L.\n\n'
+            'Autorzy projektu:\nKinga Konieczna,\nTymon Zadara,\nJan Czechowski\n\nInżynieria Internetu Rzeczy, EiTI, Politechnika Warszawska.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('POTEC - Projekt Oszustwo'),
@@ -78,6 +133,11 @@ class _LightsOutGameState extends State<LightsOutGame> {
             onPressed: () {
               setState(_initializeGrid);
             },
+          ),
+          IconButton(
+            icon: Icon(isDark ? Icons.wb_sunny : Icons.dark_mode),
+            tooltip: 'Zmień motyw',
+            onPressed: widget.onToggleTheme,
           ),
         ],
       ),
@@ -110,7 +170,10 @@ class _LightsOutGameState extends State<LightsOutGame> {
                 onTap: () => _toggle(x, y),
                 child: Container(
                   margin: const EdgeInsets.all(4.0),
-                  color: isOn ? Colors.yellow : Colors.grey[800],
+                  decoration: BoxDecoration(
+                    color: isOn ? Colors.yellow : Colors.grey[800],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
               );
             },
