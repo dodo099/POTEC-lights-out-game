@@ -91,6 +91,12 @@ class _LightsOutGameState extends State<LightsOutGame> {
 
       moveCount++;
     });
+
+    if (_isGameWon()) {
+      Future.delayed(const Duration(seconds: 1), () {
+        _showWinDialog();
+      });
+    }
   }
 
   bool _isGameWon() {
@@ -98,6 +104,30 @@ class _LightsOutGameState extends State<LightsOutGame> {
       if (row.contains(true)) return false;
     }
     return true;
+  }
+
+  void _showWinDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // wymuszamy kliknięcie przycisku
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Gratulacje!'),
+          content: const Text('Wygrałeś!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _initializeGrid();
+                  Navigator.of(context).pop();
+                });
+              },
+              child: const Text('Od nowa'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showStartDialog() {
@@ -166,7 +196,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
               const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  'You won!',
+                  'Wygrałeś!',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
                 ),
               ),
