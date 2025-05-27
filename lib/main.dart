@@ -53,7 +53,10 @@ class LightsOutGame extends StatefulWidget {
   State<LightsOutGame> createState() => _LightsOutGameState();
 }
 
+  enum Difficulty { easy, hard }
 class _LightsOutGameState extends State<LightsOutGame> {
+
+  Difficulty _difficulty = Difficulty.easy;  // domyślnie łatwe
   static const int gridSize = 5;
   late List<List<bool>> grid;
   int moveCount = 0;
@@ -61,6 +64,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
   // Przykładowe łatwe plansze (5x5) DO MODYFIKACJI!!!
   static final List<List<List<bool>>> easyBoards = [
     // // PRZYKŁADOWA - WSZYSTKIE NA FALSE DO MODYFIKACJI!
+    // Plansza nr 1
     // [
     //   [false, false, false, false, false],
     //   [false, false, false, false, false],
@@ -69,6 +73,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
     //   [false, false, false, false, false],
     // ],
 
+    // Plansza nr 1
     [
       [false, false, false, false, false],
       [false, false, false, false, false],
@@ -77,6 +82,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [false,  true,  true,  true, false],
     ],
     
+    // Plansza nr 2
     [
       [false, true, true, true, false],
       [false, true,  true, true,  false],
@@ -85,6 +91,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [false, false, false, false, false],
     ],
 
+    // Plansza nr 3
     [
       [true, true, true,  true, false],
       [true, false,  false, false,  true],
@@ -93,6 +100,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [true, true, true,  true, false],
     ],
 
+    // Plansza nr 4
     [
       [true, false, true,  false, true],
       [true, false,  false, false,  true],
@@ -101,6 +109,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [true, false, true,  false, true],
     ],
 
+    // Plansza nr 5
     [
       [false, true, false,  true, false],
       [true, true,  true, true,  true],
@@ -109,6 +118,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [true, true, true,  false, false],
     ],
 
+    // Plansza nr 6
     [
       [false, true, false,  true, false],
       [true, true,  true, true,  true],
@@ -117,6 +127,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [false, true, false,  true, false],
     ],
 
+    // Plansza nr 7
     [
       [false, false, false,  false, false],
       [false, false,  true, false,  false],
@@ -125,6 +136,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [false, false, false,  false, false],
     ],
 
+    // Plansza nr 8
     [
       [true, false, true,  false, true],
       [true, false,  false, false,  true],
@@ -133,6 +145,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [true, false, true,  false, true],
     ],
 
+    // Plansza nr 9
     [
       [true, true, true,  true, true],
       [false, false,  true, false,  false],
@@ -141,6 +154,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [true, true, true,  true, true],
     ],
 
+    // Plansza nr 10
     [
       [false, false, false, true, false],
       [false, false, true, false, true],
@@ -149,6 +163,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [false, true, false, false, false],
     ],
     
+    // Plansza nr 11
     [
       [true, false, false, false, true],
       [false, false, false, false, false],
@@ -157,6 +172,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [true, false, false, false, true],
     ],
     
+    // Plansza nr 12
     [
       [true, false, false, false, false],
       [false, false, false, false, false],
@@ -165,6 +181,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [false, false, false, false, true],
     ],
 
+    // Plansza nr 13
     [
       [false, false, false, false, false],
       [false, false, false, false, false],
@@ -173,6 +190,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [false, true, false, false, false],
     ],
     
+    // Plansza nr 14
     [
       [true, false, false, false, true],
       [false, true, false, true, false],
@@ -181,6 +199,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [true, false, false, false, true],
     ],
     
+    // Plansza nr 15
     [
       [false, true, true, true, false],
       [false, true, false, true, false],
@@ -188,6 +207,96 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [false, false, false, true, false],
       [false, true, true, true, false],
     ],
+    
+    // Plansza nr 16
+    [
+      [false, false, false, false, false],
+      [true, true, false, false, false],
+      [false, false, false, true, false],
+      [true, false, false, false, true],
+      [false, false, true, true, false],
+    ],
+    
+    // Plansza nr 17
+    [
+      [false, false, true, true, false],
+      [false, true, false, false, true],
+      [true, true, true, false, false],
+      [false, false, false, true, true],
+      [true, true, false, true, false],
+    ],
+    
+    // Plansza nr 18
+    [
+      [true, true, true, false, true],
+      [true, false, true, true, true],
+      [false, true, false, false, true],
+      [true, true, false, true, true],
+      [false, false, false, true, false],
+    ],
+    
+    // Plansza nr 19
+    [
+      [false, false, false, true, false],
+      [true, false, true, true, false],
+      [false, false, true, true, true],
+      [false, false, false, false, false],
+      [false, false, false, true, false],
+    ],
+    
+    // Plansza nr 20
+    [
+      [true, true, true, false, false],
+      [false, false, true, false, true],
+      [false, true, false, false, true],
+      [false, false, false, false, true],
+      [true, false, true, false, true],
+    ],
+    
+    // Plansza nr 21
+    [
+      [false, false, true, true, true],
+      [true, false, true, false, false],
+      [false, true, false, true, false],
+      [false, false, false, false, false],
+      [true, false, true, true, false],
+    ],
+    
+    // Plansza nr 22
+    [
+      [false, false, true, false, false],
+      [false, true, true, true, true],
+      [true, false, true, false, false],
+      [false, false, true, false, false],
+      [false, true, false, false, false],
+    ],
+    
+    // Plansza nr 23
+    [
+      [false, true, false, true, true],
+      [true, true, true, true, true],
+      [true, false, true, true, true],
+      [true, false, true, true, false],
+      [true, false, false, false, true],
+    ],
+    
+    // Plansza nr 2
+    // [
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    // ],
+    
+    // // Plansza nr 2
+    // [
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    //   [false, false, false, false, false],
+    // ],
     // DODAĆ PLANSZE KTÓRE SĄ ŁATWE!!!
   ];
 
@@ -206,6 +315,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
     grid = List.generate(gridSize, (i) =>
         List.generate(gridSize, (j) => rand.nextBool()));
     moveCount = 0;
+    _difficulty = Difficulty.hard;
   }
 
   // Nowa funkcja do wczytania łatwej planszy losowo
@@ -215,6 +325,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
     setState(() {
       grid = board.map((row) => row.toList()).toList(); // kopiujemy planszę
       moveCount = 0;
+      _difficulty = Difficulty.easy;
     });
   }
 
@@ -300,6 +411,43 @@ class _LightsOutGameState extends State<LightsOutGame> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.help_outline),
+          tooltip: 'Wskazówki',
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Center(child: Text('Wskazówka')),
+                  content: const SingleChildScrollView(
+                    child: Center(
+                      child: Text(
+                        ' DÓŁ      |   GÓRA\n\n'
+                        'O---O     |   OO---\n'
+                        '-O-O-     |   O--O-\n'
+                        'OOO--     |   -O---\n'
+                        '--OOO     |   ---O-\n'
+                        'O-OO-     |   ----O\n'
+                        '-OO-O     |   O----\n'
+                        'OO-OO     |   --O--',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontFamily: 'monospace'),
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      child: const Text('Zamknij'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
+        leadingWidth: 40,
         title: const Text(
           'POTEC - Lights Out',
           style: TextStyle(
@@ -330,10 +478,6 @@ class _LightsOutGameState extends State<LightsOutGame> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Ruchy: $moveCount',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
-            ),
             if (_isGameWon())
               const Padding(
                 padding: EdgeInsets.all(16.0),
@@ -342,6 +486,10 @@ class _LightsOutGameState extends State<LightsOutGame> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
                 ),
               ),
+            Text(
+              'Ruchy: $moveCount',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -394,38 +542,48 @@ class _LightsOutGameState extends State<LightsOutGame> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     onPressed: _loadEasyBoard,
                     child: const Text('Łatwe'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[600],
-                      foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      backgroundColor: _difficulty == Difficulty.easy ? Colors.green[800] : Colors.green[600],
+                      foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      side: const BorderSide(color: Colors.black, width: 2), // czarna ramka
+                      side: BorderSide(
+                        color: _difficulty == Difficulty.easy ? Colors.amber : Colors.transparent,
+                        width: 3,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                      )
+                      ),
                     ),
                   ),
+                  const SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: () {
-                      setState(_initializeGrid);
+                      setState(() {
+                        _initializeGrid();
+                        _difficulty = Difficulty.hard;
+                      });
                     },
                     child: const Text('Trudne'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red[600],
-                      foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      backgroundColor: _difficulty == Difficulty.hard ? Colors.red[800] : Colors.red[600],
+                      foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      side: const BorderSide(color: Colors.black, width: 2), // czarna ramka
+                      side: BorderSide(
+                        color: _difficulty == Difficulty.hard ? Colors.amber : Colors.transparent,
+                        width: 3,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                      )
+                      ),
                     ),
                   ),
                 ],
-              ),
+              )
             ),
             const SizedBox(height: 24),
           ],
