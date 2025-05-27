@@ -312,12 +312,13 @@ class _LightsOutGameState extends State<LightsOutGame> {
 
   void _initializeGrid() {
     final rand = Random();
-    grid = List.generate(gridSize, (i) =>
-        List.generate(gridSize, (j) => rand.nextBool()));
+    if (_difficulty == Difficulty.easy) {
+      _loadEasyBoard();
+    } else {
+      grid = List.generate(gridSize, (i) => List.generate(gridSize, (j) => rand.nextBool()));
+    }
     moveCount = 0;
-    _difficulty = Difficulty.hard;
   }
-
   // Nowa funkcja do wczytania łatwej planszy losowo
   void _loadEasyBoard() {
     final rand = Random();
@@ -411,8 +412,10 @@ class _LightsOutGameState extends State<LightsOutGame> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.help_outline),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 8.0), // przesunięcie w prawo
+        child: IconButton(
+          icon: const Icon(Icons.lightbulb),
           tooltip: 'Wskazówki',
           onPressed: () {
             showDialog(
@@ -447,6 +450,8 @@ class _LightsOutGameState extends State<LightsOutGame> {
             );
           },
         ),
+      ),
+
         leadingWidth: 40,
         title: const Text(
           'POTEC - Lights Out',
@@ -478,14 +483,14 @@ class _LightsOutGameState extends State<LightsOutGame> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_isGameWon())
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Wygrałeś!',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
-                ),
-              ),
+            // if (_isGameWon())
+            //   const Padding(
+            //     padding: EdgeInsets.all(16.0),
+            //     child: Text(
+            //       'Wygrałeś!',
+            //       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+            //     ),
+            //   ),
             Text(
               'Ruchy: $moveCount',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
@@ -544,48 +549,100 @@ class _LightsOutGameState extends State<LightsOutGame> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: _loadEasyBoard,
-                    child: const Text('Łatwe'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _difficulty == Difficulty.easy ? Colors.green[800] : Colors.green[600],
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      side: BorderSide(
-                        color: _difficulty == Difficulty.easy ? Colors.amber : Colors.transparent,
-                        width: 3,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
+                  _difficulty == Difficulty.easy
+                      ? Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.4),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: _loadEasyBoard,
+                            child: const Text('Łatwe'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green[600],
+                              foregroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                              side: const BorderSide(color: Colors.amber, width: 3),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        )
+                      : ElevatedButton(
+                          onPressed: _loadEasyBoard,
+                          child: const Text('Łatwe'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green[600],
+                            foregroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            side: BorderSide(color: Colors.transparent),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
                   const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _initializeGrid();
-                        _difficulty = Difficulty.hard;
-                      });
-                    },
-                    child: const Text('Trudne'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _difficulty == Difficulty.hard ? Colors.red[800] : Colors.red[600],
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      side: BorderSide(
-                        color: _difficulty == Difficulty.hard ? Colors.amber : Colors.transparent,
-                        width: 3,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
+                  _difficulty == Difficulty.hard
+                      ? Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.4),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _difficulty = Difficulty.hard;
+                                _initializeGrid();
+                              });
+                            },
+                            child: const Text('Trudne'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red[600],
+                              foregroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                              side: const BorderSide(color: Colors.amber, width: 3),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        )
+                      : ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _difficulty = Difficulty.hard;
+                              _initializeGrid();
+                            });
+                          },
+                          child: const Text('Trudne'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[600],
+                            foregroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            side: BorderSide(color: Colors.transparent),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
                 ],
-              )
-            ),
-            const SizedBox(height: 24),
+              ),
+            )
+
+          //  const SizedBox(height: 24),
           ],
         ),
       ),
