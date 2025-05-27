@@ -64,7 +64,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
   // Przykładowe łatwe plansze (5x5) DO MODYFIKACJI!!!
   static final List<List<List<bool>>> easyBoards = [
     // // PRZYKŁADOWA - WSZYSTKIE NA FALSE DO MODYFIKACJI!
-    // Plansza nr 1
+    // Plansza nr 0
     // [
     //   [false, false, false, false, false],
     //   [false, false, false, false, false],
@@ -280,16 +280,69 @@ class _LightsOutGameState extends State<LightsOutGame> {
       [true, false, false, false, true],
     ],
     
-    // Plansza nr 2
-    // [
-    //   [false, false, false, false, false],
-    //   [false, false, false, false, false],
-    //   [false, false, false, false, false],
-    //   [false, false, false, false, false],
-    //   [false, false, false, false, false],
-    // ],
+    // Plansza nr 24
+    [
+      [true, true, true, false, true],
+      [true, true, true, false, true],
+      [true, false, false, false, false],
+      [false, false, true, false, false],
+      [false, true, true, true, false],
+    ],
+
+    // Plansza nr 25
+    [
+      [false, true, false, false, false],
+      [false, false, true, false, true],
+      [true, false, false, true, false],
+      [false, true, false, false, true],
+      [false, false, true, true, false],
+    ],
     
-    // // Plansza nr 2
+    // Plansza nr 26
+    [
+      [false, true, true, false, true],
+      [false, false, true, false, false],
+      [true, true, true, true, false],
+      [false, true, false, false, true],
+      [true, true, true, true, false],
+    ],
+    
+    // Plansza nr 27
+    [
+      [false, true, false, false, true],
+      [true, false, true, true, false],
+      [false, true, true, true, true],
+      [false, false, false, true, false],
+      [false, true, false, true, true],
+    ],
+    
+    // Plansza nr 28
+    [
+      [false, false, true, false, false],
+      [true, true, true, true, false],
+      [false, true, false, false, false],
+      [false, true, true, false, false],
+      [false, true, false, false, false],
+    ],
+    
+    // Plansza nr 29
+    [
+      [true, true, false, false, false],
+      [true, true, false, true, false],
+      [false, false, true, true, true],
+      [true, false, true, true, false],
+      [false, true, true, false, true],
+    ],
+    
+    // Plansza nr 30
+    [
+      [false, false, true, true, true],
+      [true, false, true, false, false],
+      [true, false, false, true, false],
+      [true, true, false, false, true],
+      [true, false, true, true, false],
+    ],
+    // // Plansza nr 3
     // [
     //   [false, false, false, false, false],
     //   [false, false, false, false, false],
@@ -297,7 +350,6 @@ class _LightsOutGameState extends State<LightsOutGame> {
     //   [false, false, false, false, false],
     //   [false, false, false, false, false],
     // ],
-    // DODAĆ PLANSZE KTÓRE SĄ ŁATWE!!!
   ];
 
   @override
@@ -426,7 +478,7 @@ class _LightsOutGameState extends State<LightsOutGame> {
                   content: const SingleChildScrollView(
                     child: Center(
                       child: Text(
-                        ' DÓŁ      |   GÓRA\n\n'
+                        'DÓŁ      |   GÓRA\n\n'
                         'O---O     |   OO---\n'
                         '-O-O-     |   O--O-\n'
                         'OOO--     |   -O---\n'
